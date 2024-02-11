@@ -1,27 +1,7 @@
-
-#Dynamic block
-locals {
-   ingress_rules = [{
-      rule        = 100
-      port        = 80
-      description = "Ingress rules for port 80"
-   },
-   {
-     rule        = 200
-      port        = 22
-      description = "Ingree rules for port 22"
-   },
-   {
-     rule        = 300
-      port        = 443
-      description = "Ingree rules for port 433"
-   }]
-}
 #================ VPC ================
 
 resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr
-  instance_tenancy     = var.instance_tenancy
   enable_dns_hostnames = true
   enable_dns_support   = true
 
@@ -81,13 +61,33 @@ resource "aws_route_table_association" "pub_rtb_assoc" {
 }
 
 
-#================ NACL ================
-resource "aws_network_acl" "pub_nacl" {
-  vpc_id = "${aws_vpc.vpc.id}"
-  count          = "${length(var.pub_subnets_cidr)}"
-  subnet_ids = [aws_subnet.pub_subnet[0].id]
+resource "aws_security_group" "default" {
+  name        = join("-", ["vpc", "security-group"])
+  description = "Allow TLS inbound traffic"
+  vpc_id      = aws_vpc.vpc.id
+  ingress {
+    description = "VPC Access"
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
+  }
+  
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 
- egress {
+resource "aws_network_acl" "acl" {
+  vpc_id     = aws_vpc.vpc.id
+  subnet_ids = [aws_subnet.pub_subnet[1].id]
+  tags = {
+    Name = "acl"
+  }
+  egress {
     protocol   = "tcp"
     rule_no    = 200
     action     = "deny"
