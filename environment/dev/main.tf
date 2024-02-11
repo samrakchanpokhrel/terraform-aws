@@ -34,6 +34,17 @@ resource "aws_key_pair" "default" {
   public_key = tls_private_key.ec2.public_key_openssh
 }
 
+resource "aws_secretsmanager_secret" "key_pair" {
+  name = "kk"
+}
+resource "aws_secretsmanager_secret_version" "key_pair_json" {
+  secret_id = aws_secretsmanager_secret.key_pair.id
+  secret_string = jsonencode({
+    "private_key" : tls_private_key.ec2.private_key_pem
+    "public_key" : tls_private_key.ec2.public_key_pem
+  })
+}
+
 module "vpc" {
   source      = "../../Module/vpc"
   environment = local.environment
