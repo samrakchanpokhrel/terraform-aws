@@ -23,7 +23,6 @@ variable "subnet_id" {
 
 variable "ec2_cidr_blocks" {
   type = list(string)
-#   default = ["" ]
 }
 
 variable "virtualization_filter_values" {

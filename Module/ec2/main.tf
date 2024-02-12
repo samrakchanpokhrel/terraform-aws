@@ -67,13 +67,11 @@ resource "aws_security_group" "ec2" {
 }
 
 resource "aws_instance" "ec2" {
-  ami                    = "ami-0c7217cdde317cfec"#var.ami_id 
-  instance_type          = "t2.micro"#var.ec2_instance_type
+  ami                    = "ami-0c7217cdde317cfec"
+  instance_type          = "t2.micro"
   key_name               = var.key_name
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.ec2.id]
-  # ebs_optimized          = var.ebs_optimized
-#   user_data              = var.userdata
   tags = {
     Name    = var.ec2_instance_name
     Project = var.tags.Project
@@ -83,13 +81,4 @@ resource "aws_instance" "ec2" {
     volume_size           = var.ec2_volume_size
     delete_on_termination = true
   }
-  # iam_instance_profile = aws_iam_instance_profile.ec2.name
 }
-# resource "aws_eip" "elastic_ip" {
-#   tags = {
-#     Name    = var.ec2_instance_name
-#     Project = var.tags.Project
-#   }
-#   instance = aws_instance.ec2.id
-#   vpc      = true
-# }
