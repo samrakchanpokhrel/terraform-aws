@@ -60,8 +60,6 @@ variable "userdata" {
   type    = string
   default = ""
 }
-
-variable "ebs_optimized" {
-  type    = bool
-  default = false
+variable "role_name" {
+  type   = string
 }

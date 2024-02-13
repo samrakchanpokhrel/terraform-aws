@@ -4,3 +4,9 @@ environment/dev/.terraform/providers/registry.terraform.io/hashicorp/aws/4.67.0/
 environment/dev/.terraform/modules/modules.json
 environment/dev/.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.5/darwin_arm64/terraform-provider-tls_v4.0.5_x5
 environment/dev/terraform.tfstate
+environment/stage/.terraform.lock.hcl
+environment/stage/terraform.tfstate
+environment/stage/terraform.tfstate.backup
+environment/stage/.terraform/modules/modules.json
+environment/stage/.terraform/providers/registry.terraform.io/hashicorp/aws/4.67.0/darwin_arm64/terraform-provider-aws_v4.67.0_x5
+environment/stage/.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.5/darwin_arm64/terraform-provider-tls_v4.0.5_x5

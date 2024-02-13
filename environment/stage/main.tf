@@ -4,9 +4,9 @@ data "aws_caller_identity" "current" {}
 locals {
   ami_id                  = "ami-0c7217cdde317cfec"
   account_id              = data.aws_caller_identity.current.account_id
-  ec2_name                = "demo"
+  ec2_name                = "stage"
   ec2_security_group_name = "sg-ec2"
-  environment             = "dev"
+  environment             = "stage"
 }
 ##########################################################################################
 # Create EC2
@@ -16,6 +16,7 @@ module "ec2" {
   ec2_instance_name       = join("-", ["sam",local.ec2_name])
   ec2_instance_type       = "t2.micro"
   ami_id                  = local.ami_id
+  role_name = local.environment
   ec2_security_group_name = join("-", ["sam",local.ec2_name])
   vpc_id                  = module.vpc.vpc_id
   subnet_id               = module.vpc.pub_subnet_id[0]
@@ -35,7 +36,7 @@ resource "aws_key_pair" "default" {
 }
 
 resource "aws_secretsmanager_secret" "key_pair" {
-  name = "kk"
+  name = local.environment
 }
 resource "aws_secretsmanager_secret_version" "key_pair_json" {
   secret_id = aws_secretsmanager_secret.key_pair.id

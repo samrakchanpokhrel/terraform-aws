@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "default" {
 }
 resource "aws_iam_role" "default" {
 
-  name               = "ec2_role"
+  name               = var.role_name
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.default.json
 }
@@ -72,6 +72,7 @@ resource "aws_instance" "ec2" {
   key_name               = var.key_name
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.ec2.id]
+  user_data              = var.userdata
   tags = {
     Name    = var.ec2_instance_name
     Project = var.tags.Project
